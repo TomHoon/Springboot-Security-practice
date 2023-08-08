@@ -1,0 +1,19 @@
+create user 'cos'@'%' identified by 'cos1234';
+GRANT ALL PRIVILEGES ON *.* TO 'cos'@'%';
+create database security;
+use security
+
+4.11.0 경로 복사
+콘솔에 비밀번호 뜬다!
+
+security 프레임워크를 도입하였을 때
+모든 경로가 로그인 없이 못간다
+
+로그인은
+user, 비밀번호
+
+로그아웃은
+'/logout'
+
+securityfilter에서 3가지 말고 모두 permit 했으므로 
+다른곳 모두 잘 들어가짐
