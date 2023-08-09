@@ -2,6 +2,7 @@ package com.example.demo.auth;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,9 +20,17 @@ import com.example.demo.model.User;
 public class PrincipalDetails implements UserDetails{
 	
 	private User user; //콤포지션?
+	private Map<String, Object> attributes;
 	
+	//일반 로그인할 때 쓰는 생성자
 	public PrincipalDetails(User user) {
 		this.user = user;
+	}
+	
+	//OAuth로 로그인할 때 사용하는 생성자 
+	public PrincipalDetails(User user, Map<String, Object> attributes) {
+		this.user = user;
+		this.attributes = attributes;
 	}
 	
 	// 해당 User의 권한을 리턴하는 곳!!
@@ -76,5 +85,15 @@ public class PrincipalDetails implements UserDetails{
 	public void setUser(User user) {
 		this.user = user;
 	}
+
+	public Map<String, Object> getAttributes() {
+		return attributes;
+	}
+
+	public void setAttributes(Map<String, Object> attributes) {
+		this.attributes = attributes;
+	}
+	
+	
 	
 }

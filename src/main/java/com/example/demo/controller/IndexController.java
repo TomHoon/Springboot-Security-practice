@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -91,9 +93,31 @@ public class IndexController {
 	}
 	
 	@GetMapping("/test/login")
-	public @ResponseBody String testLogin(Authentication authentication) {
-		PrincipalDetails pDetails = (PrincipalDetails)authentication.getPrincipal();
+	public @ResponseBody String testLogin(
+			Authentication authentication,
+//			@AuthenticationPrincipal UserDetails userDetails
+			@AuthenticationPrincipal PrincipalDetails principalUserDetails
+			) {
+		// Google로 로그인했을 때 로그인이 안됨.. PrincipalDetails<- 이걸로 받을 수가 없다?
+		// 그래서 /test/oauth/login을 새로 만듦
+		PrincipalDetails pDetails = (PrincipalDetails)authentication.getPrincipal(); 
 		System.out.println("authentication : " + pDetails.getUser());
+		System.out.println(principalUserDetails.getUser());
 		return "세션정보 확인하기";
+	}
+	
+	@GetMapping("/test/oauth/login")
+	public @ResponseBody String testOauthLogin(
+			Authentication authentication,
+			@AuthenticationPrincipal OAuth2User oauth
+			) {
+		System.out.println("/test/oauth/login");
+		
+		
+		OAuth2User oAuth2User= (OAuth2User)authentication.getPrincipal();
+		System.out.println("oauth2User : " + oauth.getAttributes());
+		System.out.println("authentication : " + oAuth2User.getAttributes());
+		return "OAuth 세션정보 확인하기";
 	}	
+	
 }
